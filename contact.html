@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Kleed Hussain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color: #0ea5e9; 
+            --accent-color: #a78bfa; 
+            --bg-color: #1F1A1F; 
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        #network-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+        h1, h2, h3, .tab-btn, .terminal-button {
+             font-family: 'Orbitron', sans-serif;
+        }
+        #mouse-aura {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.06), transparent 50%);
+            border-radius: 50%;
+            transition: transform 0.2s ease-out;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: -150%;
+            width: 75%; height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            transform: skewX(-25deg);
+            transition: left 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .card:hover::before { left: 150%; }
+        .card:hover {
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+            border-color: rgba(192, 132, 252, 0.4);
+        }
+        .glow-text { text-shadow: 0 0 8px rgba(192, 132, 252, 0.5), 0 0 12px rgba(99, 102, 241, 0.3); }
+        .animated-entry { opacity: 0; transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .animated-entry.is-visible { opacity: 1; }
+        .entry-up { transform: translateY(50px); }
+        .entry-up.is-visible { transform: translateY(0); }
+        
+        /* Terminal Styles */
+        #contact-terminal {
+            font-family: 'Roboto Mono', monospace;
+        }
+        #terminal-screen {
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            height: 150px;
+            padding: 1rem;
+            color: #34d399; /* emerald-400 */
+        }
+        @keyframes terminal-blink {
+            from, to { opacity: 1 }
+            50% { opacity: 0 }
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #34d399;
+            animation: terminal-blink 1s step-end infinite;
+        }
+        /* Reference Card Flip */
+        .reference-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .reference-card.flipped .reference-card-inner {
+            transform: rotateY(180deg);
+        }
+        .reference-card-front, .reference-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+        .reference-card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+    <canvas id="network-canvas"></canvas>
+    <div id="mouse-aura"></div>
+
+    <main class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl relative z-10">
+        <header class="text-center py-12 animated-entry entry-up">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-50 glow-text">Initiate Contact</h1>
+            <p class="text-slate-300 mt-4">Select a secure channel to establish a connection.</p>
+        </header>
+
+        <section id="contact-terminal" class="card rounded-2xl p-6 md:p-8 my-12 animated-entry entry-up">
+            <div id="terminal-screen">
+                <p id="terminal-output"><span class="cursor"></span></p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4 mt-6">
+                <button class="terminal-button card py-2 px-5 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors" data-channel="email">Email Transmission</button>
+                <button class="terminal-button card py-2 px-5 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors" data-channel="linkedin">LinkedIn Signal</button>
+            </div>
+        </section>
+
+        <section id="references" class="my-20">
+             <h2 class="text-3xl font-bold text-center text-slate-100 mb-10 animated-entry entry-up">Verified Comm-Links</h2>
+             <div class="grid md:grid-cols-2 gap-8 animated-entry entry-up">
+                
+                <div class="card rounded-xl h-64 reference-card cursor-pointer">
+                    <div class="reference-card-inner">
+                        <div class="reference-card-front">
+                            <h3 class="font-bold text-lg text-purple-400">Spencer Smith</h3>
+                            <p class="text-slate-400 text-sm">Associate Diretor of Building & Grounds</p>
+                        </div>
+                        <div class="reference-card-back">
+                            <p class="text-slate-300 text-sm italic">"Kleed doesn't just manage technology; they strategize its future... a measurable increase in visitor engagement."</p>
+                            <p class="text-sky-400 text-sm mt-4">Contact: (513) 341-3913</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-xl h-64 reference-card cursor-pointer">
+                    <div class="reference-card-inner">
+                        <div class="reference-card-front">
+                            <h3 class="font-bold text-lg text-purple-400">James MacSkimming</h3>
+                            <p class="text-slate-400 text-sm">Director of Security</p>
+                        </div>
+                        <div class="reference-card-back">
+                            <p class="text-slate-300 text-sm italic">"The financial acumen Kleed brings to technology is rare... saved us over six figures, allowing us to re-invest those funds directly into our core mission."</p>
+                            <p class="text-sky-400 text-sm mt-4">Contact: (330) 720-5550</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card rounded-xl h-64 reference-card cursor-pointer">
+                    <div class="reference-card-inner">
+                        <div class="reference-card-front">
+                            <h3 class="font-bold text-lg text-purple-400">Beth Siler</h3>
+                            <p class="text-slate-400 text-sm">CFO</p>
+                        </div>
+                        <div class="reference-card-back">
+                            <p class="text-slate-300 text-sm italic">"Working with Kleed on securing our Arts & Culture grant was a masterclass in strategy. They don't just ask for tech; they build a compelling business case."</p>
+                             <p class="text-sky-400 text-sm mt-4">Contact: (513) 352-5148</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-xl h-64 reference-card cursor-pointer">
+                    <div class="reference-card-inner">
+                        <div class="reference-card-front">
+                            <h3 class="font-bold text-lg text-purple-400">Vaishali Shah</h3>
+                            <p class="text-slate-400 text-sm">Senior Accounting Manager</p>
+                        </div>
+                        <div class="reference-card-back">
+                            <p class="text-slate-300 text-sm italic">"Kleed translates complex technical concepts into practical solutions that empower our curatorial team. The digital archive project was a success due to their leadership."</p>
+                             <p class="text-sky-400 text-sm mt-4">Contact: (513) 668-1050</p>
+                        </div>
+                    </div>
+                </div>
+
+             </div>
+        </section>
+
+        <footer class="text-center py-10 mt-12 border-t border-slate-800">
+            <a href="index.html" class="card inline-block py-3 px-6 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors">Return to Mainframe</a>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Interactive Network Background ---
+            const canvas = document.getElementById('network-canvas');
+            const networkCtx = canvas.getContext('2d');
+            let particlesArray;
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const mouse = { x: null, y: null, radius: (canvas.height/110) * (canvas.width/110) };
+
+            window.addEventListener('mousemove', (event) => { mouse.x = event.x; mouse.y = event.y; });
+            window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+                }
+                draw() {
+                    networkCtx.beginPath();
+                    networkCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    networkCtx.fillStyle = this.color;
+                    networkCtx.fill();
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
+                    if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                    this.draw();
+                }
+            }
+            
+            function init() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - .2;
+                    let directionY = (Math.random() * .4) - .2;
+                    let color = 'rgba(167, 139, 250, 0.6)';
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                }
+            }
+
+            function connect() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                     + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width/7) * (canvas.height/7)) {
+                            opacityValue = 1 - (distance/20000);
+                            networkCtx.strokeStyle = `rgba(14, 165, 233, ${opacityValue})`;
+                            networkCtx.lineWidth = 1;
+                            networkCtx.beginPath();
+                            networkCtx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            networkCtx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            networkCtx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                networkCtx.clearRect(0, 0, innerWidth, innerHeight);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connect();
+            }
+            
+            window.addEventListener('resize', () => {
+                canvas.width = innerWidth; canvas.height = innerHeight;
+                mouse.radius = (canvas.height/110) * (canvas.width/110);
+                init();
+            });
+
+            init();
+            animate();
+
+            // --- Mouse Aura Effect ---
+            const aura = document.getElementById('mouse-aura');
+            document.addEventListener('pointermove', e => {
+                aura.style.transform = `translate(${e.clientX - 400}px, ${e.clientY - 400}px)`;
+            });
+
+            // --- 3D Card Tilt Effect ---
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const { width, height, left, top } = rect;
+                    const x = e.clientX - left;
+                    const y = e.clientY - top;
+                    const rotateX = (y / height - 0.5) * -12;
+                    const rotateY = (x / width - 0.5) * 12;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+            
+            // --- Intersection Observer ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.animated-entry').forEach(el => observer.observe(el));
+            
+            // --- Contact Terminal ---
+            const terminalOutput = document.getElementById('terminal-output');
+            const contactButtons = document.querySelectorAll('.terminal-button');
+            const contactInfo = {
+                email: "kleedhussain@outlook.com",
+                linkedin: "https://www.linkedin.com/in/khaledova/"
+            };
+
+            const typeToTerminal = (text) => {
+                terminalOutput.innerHTML = '';
+                let i = 0;
+                const typingInterval = setInterval(() => {
+                    if (i < text.length) {
+                        terminalOutput.innerHTML += text.charAt(i);
+                        i++;
+                    } else {
+                        terminalOutput.innerHTML += '<span class="cursor"></span>';
+                        clearInterval(typingInterval);
+                    }
+                }, 50);
+            };
+
+            contactButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const channel = button.dataset.channel;
+                    const textToType = `> Transmitting coordinates for ${channel}... \n> ${contactInfo[channel]}`;
+                    typeToTerminal(textToType);
+                });
+            });
+
+            // --- Reference Card Flip ---
+            const referenceCards = document.querySelectorAll('.reference-card');
+            referenceCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('flipped');
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
