@@ -22,7 +22,7 @@
         :root {
             --glow-color: #0ea5e9; /* sky-500 */
             --accent-color: #a78bfa; /* violet-400 */
-            --bg-color: #0f172a; /* slate-900 */
+            --bg-color: #1F1A1F; 
         }
         body {
             font-family: 'Roboto', sans-serif;
@@ -257,7 +257,7 @@
         </section>
         
         <footer class="text-center py-10 mt-12 border-t border-slate-800">
-            <button id="contact-btn" class="card py-3 px-6 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors">Initiate Contact</button>
+            <a href="contact.html" id="contact-btn" class="card inline-block py-3 px-6 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors">Initiate Contact</a>
         </footer>
     </main>
 
@@ -512,32 +512,7 @@
                 });
             });
             document.getElementById('holo-deck-close').addEventListener('click', () => modal.classList.remove('active'));
-
-            // Contact Button
-            document.getElementById('contact-btn').addEventListener('click', () => {
-                 modalTitle.textContent = 'Initiate Contact';
-                 modalBody.innerHTML = `<p class="text-slate-300 text-center text-lg">Your signal has been received. <br>Forward all transmissions to: <strong class="text-sky-400">kleed.hussain.pro@email.com</strong></p>`;
-                 modal.classList.add('active');
-            });
-
-
-            // --- Tech Stack Filter ---
-            const filterButtons = document.querySelectorAll('.tech-filter');
-            const techItems = document.querySelectorAll('.tech-item');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    const filter = button.dataset.filter;
-                    techItems.forEach(item => {
-                        if (filter === 'all' || item.dataset.category === filter) {
-                            item.classList.remove('hidden');
-                        } else {
-                            item.classList.add('hidden');
-                        }
-                    });
-                });
-            });
+            
 
             // --- Chart.js Radar Chart ---
             Chart.defaults.font.family = 'Orbitron';
@@ -565,6 +540,30 @@
                     plugins: { legend: { display: false }, tooltip: { backgroundColor: '#020617', titleColor: '#f8fafc', bodyColor: '#f8fafc', padding: 10, } }
                 }
             });
+
+             // Tech Stack Filter
+            const filterButtons = document.querySelectorAll('.tech-filter');
+            const techItems = document.querySelectorAll('.tech-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filter = button.dataset.filter;
+
+                    // Filter items
+                    techItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
 
         });
     </script>
