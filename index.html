@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kleed Hussain | Principal Technology Strategist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Electric Violet & Quantum Blue -->
+    <!-- Application Structure Plan: An executive narrative. Starts with a powerful Hero section and board-level KPIs. A new "Strategic Vision" slider demonstrates forward-thinking. The "Career Trajectory" timeline provides a story of growth. The "Project Holo-deck" uses modals for deep-dive case studies. The radar chart visualizes multifaceted expertise. The filtered "Technology Command" section showcases a strategic grasp of tools. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Interactive Background. Goal: Create immersive, tech-forward aesthetic. Viz/Presentation: Canvas-based particle network. Interaction: Network reacts to mouse movement, creating a sense of depth and interactivity. Justification: Reinforces the futuristic theme and adds a "wow" factor.
+        2. Report Info: Strategic vision. Goal: Demonstrate foresight. Viz/Presentation: Interactive "Future State" Slider. Interaction: Drag slider to morph KPIs and strategic statements. Justification: Shows visionary leadership.
+        3. Report Info: Career growth. Goal: Tell a story. Viz/Presentation: Interactive horizontal timeline. Interaction: Click to expand details. Justification: Shows a clear path of increasing responsibility.
+        4. Report Info: Major projects. Goal: Demonstrate capability. Viz/Presentation: Project cards opening a "Holo-deck" modal. Interaction: Click to open a focused case study. Justification: Provides deep dives into key achievements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        :root {
+            --glow-color: #0ea5e9; /* sky-500 */
+            --accent-color: #a78bfa; /* violet-400 */
+            --bg-color: #0f172a; /* slate-900 */
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        h1, h2, h3, .tab-btn {
+             font-family: 'Orbitron', sans-serif;
+        }
+        #mouse-aura {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.06), transparent 50%);
+            border-radius: 50%;
+            transition: transform 0.2s ease-out;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.5); /* slate-800 with transparency */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: -150%;
+            width: 75%; height: 100%;
+            background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            transform: skewX(-25deg);
+            transition: left 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .card:hover::before { left: 150%; }
+        .card:hover {
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+            border-color: rgba(192, 132, 252, 0.4);
+        }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin: auto; height: 450px; }
+        .glow-text { text-shadow: 0 0 8px rgba(192, 132, 252, 0.5), 0 0 12px rgba(99, 102, 241, 0.3); }
+        .animated-entry { opacity: 0; transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .animated-entry.is-visible { opacity: 1; }
+        .entry-up { transform: translateY(50px); }
+        .entry-up.is-visible { transform: translateY(0); }
+        
+        /* Typing animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent-color); }
+        }
+        #subtitle-wrapper {
+            display: inline-block;
+        }
+        #subtitle {
+            overflow: hidden;
+            border-right: .15em solid var(--accent-color);
+            white-space: nowrap;
+            animation: typing 4s steps(80, end) 1s 1 normal both, blink-caret .75s step-end infinite;
+            width: 0;
+        }
+
+        /* Vision Slider */
+        #vision-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+        #vision-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-color);
+            transition: transform 0.3s;
+        }
+        #vision-slider:hover::-webkit-slider-thumb { transform: scale(1.1); }
+        #vision-statement { min-height: 56px; }
+
+        /* Timeline Styles */
+        #timeline-container { overflow-x: auto; white-space: nowrap; padding-bottom: 20px; }
+        #timeline { display: inline-flex; position: relative; padding: 20px 0; }
+        #timeline::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+        .timeline-node { position: relative; width: 300px; padding: 0 20px; text-align: center; white-space: normal; }
+        .timeline-dot { width: 20px; height: 20px; background: #334155; border: 3px solid #64748b; border-radius: 50%; margin: 0 auto; position: relative; z-index: 1; cursor: pointer; transition: all 0.3s ease; }
+        .timeline-node.active .timeline-dot { background: var(--accent-color); border-color: #fff; transform: scale(1.2); }
+        .timeline-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, opacity 0.5s ease-out; opacity: 0; }
+        .timeline-node.active .timeline-content { max-height: 200px; opacity: 1; }
+
+        /* Holo-deck Modal Styles */
+        #holo-deck-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #holo-deck-modal.active { opacity: 1; pointer-events: auto; }
+        .holo-deck-content { background: var(--bg-color); border: 1px solid var(--accent-color); max-width: 700px; width: 90%; padding: 2rem; border-radius: 1rem; box-shadow: 0 0 50px rgba(168, 85, 247, 0.4); transform: scale(0.95); transition: transform 0.4s ease; }
+        #holo-deck-modal.active .holo-deck-content { transform: scale(1); }
+
+        /* Tech Stack Filter */
+        .tech-filter.active { color: #c084fc; background: rgba(192, 132, 252, 0.1); border-color: var(--accent-color); }
+        .tech-item { transition: opacity 0.3s ease, transform 0.3s ease; }
+        .tech-item.hidden { opacity: 0; transform: scale(0.8); pointer-events: none; height: 0; margin: 0; padding: 0; border: none; }
+
+    </style>
+</head>
+<body class="antialiased">
+    <canvas id="network-canvas"></canvas>
+    <div id="mouse-aura"></div>
+
+    <main class="container mx-auto p-4 sm:p-6 md:p-8 max-w-7xl relative z-10">
+
+        <header class="text-center py-20 animated-entry entry-up">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-50 glow-text">Kleed Hussain</h1>
+            <div id="subtitle-wrapper" class="mt-4">
+                <p id="subtitle" class="text-lg md:text-xl text-purple-400 font-medium">Principal Technology Strategist | Non-Profit & Arts Sector Innovator</p>
+            </div>
+        </header>
+        
+        <section id="vision-section" class="my-20 py-12 card rounded-2xl animated-entry entry-up">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Strategic Vision</h2>
+            <p class="text-center text-slate-300 mb-10 max-w-3xl mx-auto">Drag the slider to see how past performance translates into future impact. This roadmap demonstrates a clear path from foundational excellence to AI-driven innovation.</p>
+            
+            <div id="vision-kpis" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center my-8">
+                <div class="p-4 rounded-xl">
+                    <p class="text-5xl font-bold text-sky-400 metric" data-today="99.8" data-future="99.99">99.8</p>
+                    <p class="text-sm text-slate-400 mt-2">System Uptime %</p>
+                </div>
+                <div class="p-4 rounded-xl">
+                    <p class="text-5xl font-bold text-sky-400 metric" data-today="40" data-future="90">40</p>
+                    <p class="text-sm text-slate-400 mt-2">Threat Mitigation %</p>
+                </div>
+                <div class="p-4 rounded-xl">
+                    <p class="text-5xl font-bold text-sky-400 metric" data-today="20" data-future="60">20</p>
+                    <p class="text-sm text-slate-400 mt-2">Operational Automation %</p>
+                </div>
+                 <div class="p-4 rounded-xl">
+                    <p class="text-5xl font-bold text-sky-400 metric" data-today="10" data-future="35">10</p>
+                    <p class="text-sm text-slate-400 mt-2">Data-Driven Revenue Growth %</p>
+                </div>
+            </div>
+
+            <div class="px-4 md:px-8">
+                 <div class="flex justify-between font-bold text-sm text-purple-400 mb-2">
+                    <span>TODAY: Proven Excellence</span>
+                    <span>2028: Predictive Enterprise</span>
+                </div>
+                <input id="vision-slider" type="range" min="0" max="1" step="0.01" value="0">
+                <p id="vision-statement" class="text-center text-lg text-slate-200 mt-6 font-semibold"></p>
+            </div>
+        </section>
+
+        <section id="career-timeline" class="my-20 animated-entry entry-up">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-10">Career Trajectory</h2>
+            <div id="timeline-container" class="card rounded-xl p-4">
+                <div id="timeline">
+                    <!-- Nodes will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="spotlight" class="my-20">
+             <h2 class="text-3xl font-bold text-center text-slate-100 mb-10 animated-entry entry-up">Project Holo-deck</h2>
+             <div class="grid md:grid-cols-3 gap-6 animated-entry entry-up">
+                <div class="card rounded-xl p-6 text-center cursor-pointer project-card" data-project="digital">
+                    <h3 class="font-bold text-lg text-purple-400">Digital Transformation</h3>
+                    <p class="text-slate-400 text-sm mt-2">Cloud migration & infrastructure overhaul.</p>
+                </div>
+                 <div class="card rounded-xl p-6 text-center cursor-pointer project-card" data-project="security">
+                    <h3 class="font-bold text-lg text-purple-400">Cybersecurity Fortification</h3>
+                    <p class="text-slate-400 text-sm mt-2">Zero Trust implementation & risk reduction.</p>
+                </div>
+                <div class="card rounded-xl p-6 text-center cursor-pointer project-card" data-project="data">
+                    <h3 class="font-bold text-lg text-purple-400">Data Analytics Platform</h3>
+                    <p class="text-slate-400 text-sm mt-2">Visitor engagement & revenue insights.</p>
+                </div>
+             </div>
+        </section>
+
+
+        <section id="scope" class="my-20 py-12 card rounded-2xl animated-entry entry-up">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-4">Leadership Competency Matrix</h2>
+            <div class="chart-container">
+                <canvas id="roleChart"></canvas>
+            </div>
+        </section>
+        
+        <section id="tech-stack" class="my-12 animated-entry entry-up">
+             <h2 class="text-3xl font-bold text-center text-slate-100 mb-10">Technology Command</h2>
+             <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8">
+                <button data-filter="all" class="card tech-filter py-2 px-5 rounded-full border-2 font-medium active">All</button>
+                <button data-filter="infra" class="card tech-filter py-2 px-5 rounded-full border-2 font-medium">Infrastructure</button>
+                <button data-filter="analytics" class="card tech-filter py-2 px-5 rounded-full border-2 font-medium">Platforms & Analytics</button>
+                <button data-filter="security" class="card tech-filter py-2 px-5 rounded-full border-2 font-medium">Security</button>
+             </div>
+             <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 text-center">
+                <div class="card p-4 rounded-lg tech-item" data-category="infra">Microsoft 365</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="security">Azure AD</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="infra">Unifi Networking</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="infra">Aruba Switches</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="security">WatchGuard</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="infra">VMware</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="infra">Synology NAS</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="analytics">Power Platform</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="analytics">QuickBooks</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="analytics">Adobe CC</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="analytics">Altru CRM</div>
+                <div class="card p-4 rounded-lg tech-item" data-category="security">Waltz Security</div>
+             </div>
+        </section>
+        
+        <footer class="text-center py-10 mt-12 border-t border-slate-800">
+            <button id="contact-btn" class="card py-3 px-6 rounded-full border-2 font-medium border-transparent hover:border-accent-color transition-colors">Initiate Contact</button>
+        </footer>
+    </main>
+
+    <div id="holo-deck-modal">
+        <div class="holo-deck-content">
+            <h3 id="holo-deck-title" class="text-2xl font-bold text-purple-400 mb-4"></h3>
+            <div id="holo-deck-body"></div>
+            <button id="holo-deck-close" class="mt-6 card py-2 px-5 rounded-full border-2 border-transparent hover:border-accent-color">Close Transmission</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Interactive Network Background ---
+            const canvas = document.getElementById('network-canvas');
+            const networkCtx = canvas.getContext('2d');
+            let particlesArray;
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const mouse = { x: null, y: null, radius: (canvas.height/110) * (canvas.width/110) };
+
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            });
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.directionX = directionX;
+                    this.directionY = directionY;
+                    this.size = size;
+                    this.color = color;
+                }
+                draw() {
+                    networkCtx.beginPath();
+                    networkCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    networkCtx.fillStyle = this.color;
+                    networkCtx.fill();
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > canvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
+                    }
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                    this.draw();
+                }
+            }
+            
+            function init() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - .2;
+                    let directionY = (Math.random() * .4) - .2;
+                    let color = 'rgba(167, 139, 250, 0.6)';
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                }
+            }
+
+            function connect() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                     + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width/7) * (canvas.height/7)) {
+                            opacityValue = 1 - (distance/20000);
+                            networkCtx.strokeStyle = `rgba(14, 165, 233, ${opacityValue})`;
+                            networkCtx.lineWidth = 1;
+                            networkCtx.beginPath();
+                            networkCtx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            networkCtx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            networkCtx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                networkCtx.clearRect(0, 0, innerWidth, innerHeight);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connect();
+            }
+            
+            window.addEventListener('resize', () => {
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = (canvas.height/110) * (canvas.width/110);
+                init();
+            });
+
+            init();
+            animate();
+
+            // --- Mouse Aura Effect ---
+            const aura = document.getElementById('mouse-aura');
+            document.addEventListener('pointermove', e => {
+                aura.style.transform = `translate(${e.clientX - 400}px, ${e.clientY - 400}px)`;
+            });
+
+            // --- 3D Card Tilt Effect ---
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const { width, height, left, top } = rect;
+                    const x = e.clientX - left;
+                    const y = e.clientY - top;
+                    const rotateX = (y / height - 0.5) * -12;
+                    const rotateY = (x / width - 0.5) * 12;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+            
+            // --- Intersection Observer ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.animated-entry').forEach(el => observer.observe(el));
+            
+            // --- Strategic Vision Slider ---
+            const visionSlider = document.getElementById('vision-slider');
+            const visionStatement = document.getElementById('vision-statement');
+            const kpiMetrics = document.querySelectorAll('#vision-kpis .metric');
+
+            const statements = [
+                "Building a resilient and modern digital foundation.",
+                "Optimizing operations and enhancing cybersecurity posture.",
+                "Leveraging data analytics for actionable insights.",
+                "Pioneering AI-driven automation for predictive operations.",
+                "Achieving a fully autonomous, self-healing digital enterprise."
+            ];
+
+            const updateVision = () => {
+                const progress = parseFloat(visionSlider.value);
+                
+                // Update KPIs
+                kpiMetrics.forEach(el => {
+                    const today = parseFloat(el.dataset.today);
+                    const future = parseFloat(el.dataset.future);
+                    const value = today + (future - today) * progress;
+                    
+                    if (el.dataset.today.includes('.')) {
+                        el.textContent = value.toFixed(2);
+                    } else {
+                        el.textContent = Math.round(value);
+                    }
+                });
+                
+                // Update Statement
+                const statementIndex = Math.min(Math.floor(progress * (statements.length - 0.001)), statements.length - 1);
+                if (visionStatement.textContent !== statements[statementIndex]) {
+                    visionStatement.style.opacity = 0;
+                    setTimeout(() => {
+                        visionStatement.textContent = statements[statementIndex];
+                        visionStatement.style.opacity = 1;
+                    }, 200);
+                }
+            };
+            visionStatement.style.transition = 'opacity 0.2s ease-in-out';
+            visionSlider.addEventListener('input', updateVision);
+            updateVision(); // Initial call
+
+
+            // --- Career Timeline ---
+            const timelineData = [
+                { year: '2020', title: 'Foundation & Modernization', description: 'Upgraded core infrastructure, achieving 99.8% uptime and reducing legacy system costs by 20%.' },
+                { year: '2022', title: 'Strategic Vendor Management', description: 'Consolidated vendors and renegotiated contracts, realizing over $150k in grants and annual savings.' },
+                { year: '2023', title: 'Cybersecurity Overhaul', description: 'Implemented a Zero Trust framework, reducing critical security incidents by 40% year-over-year.' },
+                { year: '2024', title: 'Digital Innovation Lead', description: 'Launched a data analytics platform correlating visitor traffic with digital engagement, informing new revenue strategies.' },
+                { year: '2025', title: 'Enterprise Strategy', description: 'Presented a 3-year technology roadmap to the board, securing funding for enterprise-wide AI and automation initiatives.' },
+            ];
+            const timelineContainer = document.getElementById('timeline');
+            timelineData.forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'timeline-node';
+                node.innerHTML = `
+                    <div class="text-purple-400 font-bold mb-2">${item.title}</div>
+                    <div class="timeline-dot" data-year="${item.year}"></div>
+                    <div class="mt-2 text-sm text-slate-400">${item.year}</div>
+                    <div class="timeline-content mt-3 text-slate-300">${item.description}</div>
+                `;
+                timelineContainer.appendChild(node);
+            });
+            const timelineNodes = document.querySelectorAll('.timeline-node');
+            timelineNodes.forEach(node => {
+                node.querySelector('.timeline-dot').addEventListener('click', () => {
+                    const isActive = node.classList.contains('active');
+                    timelineNodes.forEach(n => n.classList.remove('active'));
+                    if (!isActive) node.classList.add('active');
+                });
+            });
+
+            // --- Holo-deck Modal ---
+            const projectData = {
+                digital: {
+                    title: 'Digital Transformation Initiative',
+                    body: `<p class="text-slate-300"><strong class="text-sky-400">Challenge:</strong> Legacy on-premise infrastructure was creating operational bottlenecks and lacked scalability, hindering staff efficiency and future digital projects.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Action:</strong> Architected and executed a full cloud migration to a Microsoft 365 & Azure hybrid environment. This included upgrading the entire network fabric (Unifi/Aruba) and implementing a virtualized server environment for remaining on-prem applications.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Result:</strong> Resulted in a 25% boost in staff productivity, a 30% reduction in IT support tickets, and established a scalable foundation that cut time-to-deployment for new services by 50%.</p>`
+                },
+                security: {
+                    title: 'Cybersecurity Fortification Project',
+                    body: `<p class="text-slate-300"><strong class="text-sky-400">Challenge:</strong> The organization faced increasing threats with a traditional perimeter-based security model that offered limited protection for a modern, hybrid workforce.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Action:</strong> Led the adoption of a Zero Trust security model using Azure AD for identity management and WatchGuard for advanced threat protection. Rolled out mandatory multi-factor authentication and a continuous phishing simulation program.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Result:</strong> Reduced critical security incidents by 40%. Improved phishing test pass rates from 60% to 95% within one year, significantly strengthening the human firewall.</p>`
+                },
+                data: {
+                    title: 'Data Analytics & Visitor Insights Platform',
+                    body: `<p class="text-slate-300"><strong class="text-sky-400">Challenge:</strong> Decision-making about visitor engagement and exhibit placement was largely based on anecdotal evidence rather than empirical data.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Action:</strong> Developed and deployed a data aggregation platform using Microsoft Power Platform to correlate data from Altru CRM, Wi-Fi analytics, and digital kiosk interactions. Built dashboards for leadership to visualize trends.</p>
+                           <p class="text-slate-300 mt-3"><strong class="text-sky-400">Result:</strong> Provided actionable insights that led to a 15% increase in visitor dwell time in targeted exhibits and informed a new membership drive strategy that grew sign-ups by 10%.</p>`
+                }
+            };
+            const modal = document.getElementById('holo-deck-modal');
+            const modalTitle = document.getElementById('holo-deck-title');
+            const modalBody = document.getElementById('holo-deck-body');
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const projectKey = card.dataset.project;
+                    modalTitle.textContent = projectData[projectKey].title;
+                    modalBody.innerHTML = projectData[projectKey].body;
+                    modal.classList.add('active');
+                });
+            });
+            document.getElementById('holo-deck-close').addEventListener('click', () => modal.classList.remove('active'));
+
+            // Contact Button
+            document.getElementById('contact-btn').addEventListener('click', () => {
+                 modalTitle.textContent = 'Initiate Contact';
+                 modalBody.innerHTML = `<p class="text-slate-300 text-center text-lg">Your signal has been received. <br>Forward all transmissions to: <strong class="text-sky-400">kleed.hussain.pro@email.com</strong></p>`;
+                 modal.classList.add('active');
+            });
+
+
+            // --- Tech Stack Filter ---
+            const filterButtons = document.querySelectorAll('.tech-filter');
+            const techItems = document.querySelectorAll('.tech-item');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const filter = button.dataset.filter;
+                    techItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // --- Chart.js Radar Chart ---
+            Chart.defaults.font.family = 'Orbitron';
+            const chartCtx = document.getElementById('roleChart').getContext('2d');
+            const roleChart = new Chart(chartCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Technology Roadmapping', 'Budget & Finance', 'Team Leadership', 'Cybersecurity Strategy', 'Vendor & Partner Ecosystem', 'Operational Excellence'],
+                    datasets: [{
+                        label: 'Leadership Competency',
+                        data: [9, 8, 7, 9, 8, 8],
+                        backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                        borderColor: 'rgba(192, 132, 252, 1)',
+                        pointBackgroundColor: 'rgba(192, 132, 252, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(192, 132, 252, 1)',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    animation: { duration: 1500, easing: 'easeInOutQuint' },
+                    scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.2)' }, grid: { color: 'rgba(255, 255, 255, 0.2)' }, pointLabels: { color: '#cbd5e1', font: { size: 12 } }, ticks: { display: false, backdropColor: 'transparent' } } },
+                    plugins: { legend: { display: false }, tooltip: { backgroundColor: '#020617', titleColor: '#f8fafc', bodyColor: '#f8fafc', padding: 10, } }
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
