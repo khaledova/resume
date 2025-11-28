@@ -142,7 +142,7 @@
   }
 
   .subtitle{ margin-top:12px; font-size:clamp(13px,1.7vw,17px); color:var(--muted); line-height:1.45; max-width:520px; font-family:"Orbitron",sans-serif; letter-spacing:0.02em; }
-  .subtitle .neon { color: #60a5fa; text-shadow: 0 0 15px rgba(96, 165, 250, 0.8); }
+  .subtitle .neon { color: var(--neon-cyan); text-shadow: none; }
   .available-row{ margin-top:16px; display:flex; align-items:center; gap:12px; font-weight:600; font-size:clamp(12px,1.5vw,15px); color:#fff; }
   .linkedin-box{ width:30px;height:30px;display:grid;place-items:center; border:2px solid rgba(255,255,255,0.9); border-radius:4px; font-weight:800; font-size:15px; line-height:1; }
   .available-dot{ width:9px; height:9px; border-radius:50%; background: #4ade80; box-shadow:0 0 10px #4ade80; animation: blink 1.3s ease-in-out infinite; }
@@ -182,7 +182,7 @@
   .start-btn-text { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(2rem, 4vw, 3rem); color: #ffffff; animation: pulseText 1.5s infinite alternate; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.4); }
   .start-sub { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #888; margin-top: 10px; letter-spacing: 0.1em; }
   @keyframes pulseText { from { opacity: 0.8; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); } to { opacity: 1; text-shadow: 0 0 30px rgba(255, 255, 255, 1.0); } }
-  .node-label { position: absolute; transform: translate(-50%, -50%); color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; pointer-events: auto; cursor: pointer; padding: 6px 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); transition: opacity 0.5s, transform 0.3s, background-color 0.3s, border-color 0.3s, color 0.3s; opacity: 0; white-space: nowrap; text-transform: uppercase; display: flex; align-items: center; gap: 8px; z-index: 20; }
+  .node-label { position: absolute; transform: translate(-50%, -50%); color: rgba(255,255,255,0.9); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.1em; pointer-events: auto; cursor: pointer; padding: 10px 18px; border: 1px solid rgba(255,255,255,0.25); background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); transition: opacity 0.5s, transform 0.3s, background-color 0.3s, border-color 0.3s, color 0.3s; opacity: 0; white-space: nowrap; text-transform: uppercase; display: flex; align-items: center; gap: 8px; z-index: 20; }
   .node-label::before { content: ''; width: 6px; height: 6px; background: #555; border-radius: 50%; display: block; box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: 0.3s; }
   .node-label:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--neon-cyan); color: #fff; transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
   .node-label:hover::before { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
@@ -320,9 +320,6 @@
   /* --- ANIMATIONS MOVED FROM JS --- */
   @keyframes fadeInRight { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
   @keyframes scanData { 0% { top: 0%; } 100% { top: 100%; } }
-  @keyframes spinX { from { transform: rotateX(0deg); } to { transform: rotateX(360deg); } }
-  @keyframes spinY { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
-  @keyframes spinZ { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
   @keyframes scanDown { 0% { top: -10%; } 100% { top: 110%; } }
 </style>
 </head>
@@ -345,9 +342,9 @@
         <div class="glitch" data-text="HUSSAIN">HUSSAIN</div>
       </div>
 
-      <div class="subtitle">
+      <div class="subtitle font-bold">
         <span class="neon">Strategic IT Solutions &amp; Infrastructure</span><br/>
-        Leader with over 10+ years of experience
+        <span class="neon">Leader with over 10+ years of experience</span>
       </div>
 
       <div class="available-row">
@@ -392,9 +389,10 @@
 
         <div id="hud-header" class="ni-header-hud">
             <div class="brand-block" style="max-width: 320px;">
-                <h2 class="ni-brand-name" style="font-size: clamp(1.5rem, 2.5vw, 2.2rem); line-height: 1.1; margin-bottom: 12px;">PROFESSIONAL<br>PORTFOLIO</h2>
+                <h2 class="ni-brand-name">PROFESSIONAL<br>PORTFOLIO</h2>
                 
-                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; font-family: 'Roboto', sans-serif;">
+                <!-- Hidden on Mobile -->
+                <div class="ni-desc-text hidden md:block" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; font-family: 'Roboto', sans-serif;">
                     <div style="font-size: clamp(0.7rem, 0.9vw, 0.8rem); line-height: 1.6; color: #fff; margin-bottom: 0;">
                         <span style="color: #c084fc; font-weight: 600;">Visionary IT Executive</span> with over 10+ years of experience
                     </div>
@@ -404,7 +402,7 @@
                 </div>
             </div>
             
-            <div style="text-align: right; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono'; font-size: 0.6rem; line-height: 1.5;">
+            <div class="ni-status-block" style="text-align: right; color: rgba(255,255,255,0.4); font-family: 'JetBrains Mono'; font-size: 0.6rem; line-height: 1.5;">
                 <div class="flex items-center gap-2 justify-end">
                     <span>NODE STATUS: ONLINE</span>
                     <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -1510,66 +1508,113 @@
       }
   });
 
-  // --- GLOBAL PARTICLE WARP SPEED EFFECT ---
+  // --- GLOBAL NETWORK CONNECTION EFFECT ---
   (function() {
       const c = document.getElementById("global-network");
       if(!c) return;
       const ctx = c.getContext("2d");
-      let w, h, particles = [];
-      let mouseSpeed = 0;
-      let lastMouseX = 0;
-      let lastMouseY = 0;
+      let w, h;
+      let particles = [];
+      const connectionDistance = 150;
+      const mouseDistance = 200;
 
-      function resize(){
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-        particles = [];
-        const count = Math.floor((w*h)/12000);
-        for(let i=0;i<count;i++){
-          particles.push({
-            x: Math.random()*w,
-            y: Math.random()*h,
-            z: Math.random()*2, 
-            vx:(Math.random()-0.5)*0.2,
-            vy:(Math.random()-0.5)*0.2,
-            r: Math.random()*1.5
-          });
-        }
-      }
-      
+      let mouse = { x: null, y: null };
+
       window.addEventListener('mousemove', (e) => {
-          const dx = e.clientX - lastMouseX;
-          const dy = e.clientY - lastMouseY;
-          mouseSpeed = Math.sqrt(dx*dx + dy*dy);
-          lastMouseX = e.clientX;
-          lastMouseY = e.clientY;
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+      });
+      
+      window.addEventListener('mouseleave', () => {
+          mouse.x = null;
+          mouse.y = null;
       });
 
-      function tick(){
-        ctx.clearRect(0,0,w,h);
-        if(mouseSpeed > 5) {
-            ctx.fillStyle = `rgba(3, 3, 5, 0.2)`;
-            ctx.fillRect(0,0,w,h);
-        }
-        mouseSpeed *= 0.95;
-
-        for(const p of particles){
-          const stretch = Math.min(mouseSpeed * 0.5, 5);
-          p.x+=p.vx * (1 + mouseSpeed * 0.1); 
-          p.y+=p.vy * (1 + mouseSpeed * 0.1);
+      class Particle {
+          constructor() {
+              this.x = Math.random() * w;
+              this.y = Math.random() * h;
+              this.vx = (Math.random() - 0.5) * 0.5;
+              this.vy = (Math.random() - 0.5) * 0.5;
+              this.size = Math.random() * 1.5 + 0.5;
+              this.color = Math.random() > 0.5 ? 'rgba(0, 243, 255, ' : 'rgba(167, 139, 250, '; // cyan or purple
+          }
           
-          if(p.x<0) p.x = w; if(p.x>w) p.x = 0;
-          if(p.y<0) p.y = h; if(p.y>h) p.y = 0;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-          ctx.fillStyle = `rgba(255,255,255,${0.3 + p.z * 0.2})`;
-          ctx.fill();
-        }
-        requestAnimationFrame(tick);
+          update() {
+              this.x += this.vx;
+              this.y += this.vy;
+              
+              // Bounce/Wrap
+              if (this.x < 0 || this.x > w) this.vx *= -1;
+              if (this.y < 0 || this.y > h) this.vy *= -1;
+              
+              // Mouse interaction
+              if(mouse.x != null) {
+                  let dx = mouse.x - this.x;
+                  let dy = mouse.y - this.y;
+                  let distance = Math.sqrt(dx*dx + dy*dy);
+                  if (distance < mouseDistance) {
+                      const forceDirectionX = dx / distance;
+                      const forceDirectionY = dy / distance;
+                      const force = (mouseDistance - distance) / mouseDistance;
+                      const directionX = forceDirectionX * force * 0.6;
+                      const directionY = forceDirectionY * force * 0.6;
+                      if(distance < mouseDistance) {
+                          this.x -= directionX;
+                          this.y -= directionY;
+                      }
+                  }
+              }
+          }
+          
+          draw() {
+              ctx.beginPath();
+              ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+              ctx.fillStyle = this.color + '0.5)';
+              ctx.fill();
+          }
       }
-      window.addEventListener("resize", resize);
-      resize(); tick();
+
+      function init() {
+          w = c.width = window.innerWidth;
+          h = c.height = window.innerHeight;
+          particles = [];
+          // Adjust count based on screen area
+          const count = Math.floor((w * h) / 15000); 
+          for (let i = 0; i < count; i++) {
+              particles.push(new Particle());
+          }
+      }
+
+      function animate() {
+          ctx.clearRect(0, 0, w, h);
+          
+          for (let i = 0; i < particles.length; i++) {
+              particles[i].update();
+              particles[i].draw();
+              
+              for (let j = i; j < particles.length; j++) {
+                  let dx = particles[i].x - particles[j].x;
+                  let dy = particles[i].y - particles[j].y;
+                  let distance = Math.sqrt(dx * dx + dy * dy);
+                  
+                  if (distance < connectionDistance) {
+                      ctx.beginPath();
+                      let opacity = 1 - (distance / connectionDistance);
+                      ctx.strokeStyle = 'rgba(100, 116, 139, ' + (opacity * 0.15) + ')'; // Slate color, low opacity
+                      ctx.lineWidth = 1;
+                      ctx.moveTo(particles[i].x, particles[i].y);
+                      ctx.lineTo(particles[j].x, particles[j].y);
+                      ctx.stroke();
+                  }
+              }
+          }
+          requestAnimationFrame(animate);
+      }
+
+      window.addEventListener("resize", init);
+      init();
+      animate();
   })();
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -1682,7 +1727,12 @@
     };
     
     // Add custom keyframes for the modal animation if not present
-    // KEYFRAMES NOW IN CSS, JS REMOVED FOR OPTIMIZATION
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @keyframes fadeInRight { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes scanData { 0% { top: 0%; } 100% { top: 100%; } }
+    `;
+    document.head.appendChild(styleSheet);
 
     document.getElementById('holo-deck-close').addEventListener('click', () => document.getElementById('holo-deck-modal').classList.remove('active'));
     document.getElementById('holo-deck-modal').addEventListener('click', (e) => {
@@ -1882,7 +1932,16 @@
     scene.fog = new THREE.FogExp2(0x030305, 0.045);
 
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    camera.position.z = 17;
+    
+    // --- RESPONSIVE CAMERA LOGIC ---
+    function updateCameraPosition() {
+        const isMobile = window.innerWidth < 768;
+        // On mobile, push the camera further back (Z=28) so all 4 nodes (radius 9.5) are visible vertically.
+        // On desktop, Z=17 is perfect.
+        camera.position.z = isMobile ? 28 : 17;
+    }
+    // Set initial position
+    updateCameraPosition();
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -2091,8 +2150,11 @@
         overlay.style.pointerEvents = 'none';
         document.getElementById('hud-header').style.opacity = 1;
 
-        gsap.to(camera.position, { z: 16, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut", onComplete: () => {
-            gsap.to(camera.position, { z: 17, duration: 1.5, ease: "elastic.out(1, 0.5)" });
+        const targetZ = window.innerWidth < 768 ? 24 : 16;
+        const finalZ = window.innerWidth < 768 ? 28 : 17;
+
+        gsap.to(camera.position, { z: targetZ, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut", onComplete: () => {
+            gsap.to(camera.position, { z: finalZ, duration: 1.5, ease: "elastic.out(1, 0.5)" });
         }});
         gsap.to(coreGroup.scale, { x: 1, y: 1, z: 1, duration: 1.5, ease: "expo.out" });
 
@@ -2132,7 +2194,9 @@
         modal.classList.remove('active');
         document.querySelectorAll('.node-label').forEach(l => l.classList.remove('active'));
         connectorPath.setAttribute('d', ''); 
-        gsap.to(camera.position, { x: 0, y: 0, z: 17, duration: 1.0, ease: "power3.inOut", onUpdate: () => camera.lookAt(0,0,0) });
+        
+        const finalZ = window.innerWidth < 768 ? 28 : 17;
+        gsap.to(camera.position, { x: 0, y: 0, z: finalZ, duration: 1.0, ease: "power3.inOut", onUpdate: () => camera.lookAt(0,0,0) });
     }
 
     function activateNode(mesh) {
@@ -2229,6 +2293,8 @@
         tempV.project(camera);
         const x = (tempV.x * .5 + .5) * container.clientWidth;
         const y = (tempV.y * -.5 + .5) * container.clientHeight;
+        
+        // Improve visibility logic
         if(Math.abs(tempV.z) > 1) {
              label.style.opacity = 0;
         } else {
@@ -2295,6 +2361,7 @@
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(container.clientWidth, container.clientHeight);
+        updateCameraPosition();
     });
 
     animate();
