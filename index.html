@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Kleed Hussain | Executive Portfolio</title>
 
+ 
+<!-- 1. REQUIRED FONTS & ICONS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+
+  
 <!-- FAVICONS -->
 <link rel="icon" href="https://i.imgur.com/F6LTjVf.png" type="image/png">
 
@@ -1112,71 +1120,100 @@
         </div>
     </section>
 
-    <!-- === REDESIGNED: NEURAL UPLINKS (GYRO-PORTS) === -->
-    <header class="flex flex-col items-center py-12 mt-24 animated-entry entry-up text-center">
-        <div class="inline-block mb-2 px-3 py-1 border border-cyan-500/30 rounded-full bg-cyan-900/10 text-[10px] font-mono text-cyan-400 tracking-[0.2em]"></div>
-        <h2 class="text-3xl md:text-4xl font-black text-white glow-text font-orbitron section-glitch" data-text="NEURAL UPLINKS">NEURAL UPLINKS</h2>
-        <p class="section-subtitle">Contact information</p>
-    </header>
+   <!-- 3. PASTE THIS SECTION WHERE YOU WANT THE CONTACT INFO -->
+    <section id="neural-contact-section" class="relative w-full py-24 flex flex-col items-center justify-center">
 
-    <section id="contact-channels" class="flex flex-wrap justify-center gap-12 my-16 animated-entry entry-up px-4 perspective-container" style="perspective: 1000px;">
-        
-        <!-- EMAIL GYRO-PORT -->
-        <div class="gyro-port group relative w-64 h-64 cursor-pointer transition-all duration-500">
-            <!-- 3D Rotating Rings -->
-            <div class="rings-container absolute inset-0 pointer-events-none transition-all duration-700 group-hover:scale-110" style="transform-style: preserve-3d;">
-                <div class="absolute inset-0 rounded-full border border-cyan-500/30 animate-[spinX_4s_linear_infinite]"></div>
-                <div class="absolute inset-2 rounded-full border border-cyan-400/20 animate-[spinY_5s_linear_infinite]"></div>
-                <div class="absolute inset-4 rounded-full border border-cyan-300/10 animate-[spinZ_6s_linear_infinite]"></div>
-            </div>
-            
-            <!-- Core Node -->
-            <div class="absolute inset-0 flex items-center justify-center z-10">
-                <div class="core-node bg-[#050508] w-32 h-32 rounded-full border-2 border-cyan-500/50 shadow-[0_0_40px_rgba(6,182,212,0.2)] flex flex-col items-center justify-center transition-all duration-500 group-hover:shadow-[0_0_60px_rgba(6,182,212,0.5)] group-hover:border-cyan-400 relative overflow-hidden">
-                    <div class="flex flex-col items-center justify-center">
-                        <span class="text-2xl mb-1 text-cyan-100">✉</span>
-                        <span class="font-orbitron font-bold text-[10px] text-cyan-500 tracking-widest mb-1">EMAIL</span>
-                        <span class="font-bold text-white text-[11px] text-center select-all px-2" style="text-shadow: none;">kleedhussain@<br>outlook.com</span>
+        <!-- HEADER -->
+        <header class="mb-12 md:mb-20 text-center relative z-10 px-4">
+            <h2 class="text-3xl md:text-6xl font-black text-white font-orbitron tracking-widest relative">
+                <span class="relative z-10 drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]">NEURAL UPLINKS</span>
+            </h2>
+            <div class="h-[1px] w-32 mx-auto bg-gradient-to-r from-transparent via-cyber-cyan to-transparent mt-6 opacity-50"></div>
+        </header>
+
+        <!-- INTERFACE GRID -->
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-24 w-full max-w-7xl px-4 pb-12">
+
+            <!-- === 01: EMAIL GYRO-PORT === -->
+            <div id="email-port" class="gyro-port gyro-container relative w-64 h-64 cursor-pointer group" onclick="togglePort('email-port')">
+                <div class="rings-container absolute inset-[-20%] pointer-events-none">
+                    <div class="ring-decor ring-1 absolute inset-0 border-t-2 border-b-2 border-cyber-cyan/30 rounded-full animate-spin-slow"></div>
+                    <div class="ring-decor ring-2 absolute inset-4 border-l-2 border-r-2 border-cyber-cyan/20 rounded-full animate-spin-reverse"></div>
+                    <div class="ring-decor absolute inset-8 border border-dashed border-cyber-cyan/10 rounded-full animate-[spin_12s_linear_infinite]"></div>
+                </div>
+
+                <div class="core-node relative w-full h-full rounded-full shadow-[0_0_30px_rgba(0,243,255,0.15)] group-hover:shadow-[0_0_50px_rgba(0,243,255,0.3)] transition-shadow duration-500">
+                    <!-- FRONT -->
+                    <div class="face face-front border-2 border-cyber-cyan/50 bg-[#050508]">
+                        <i class="fas fa-at text-4xl text-white mb-3 drop-shadow-[0_0_10px_#00f3ff]"></i>
+                        <div class="font-orbitron font-bold text-cyber-cyan tracking-[0.2em] text-sm">EMAIL_RELAY</div>
+                        <div class="text-[9px] text-cyber-cyan/50 mt-2 font-rajdhani">TAP TO DECRYPT</div>
+                    </div>
+                    <!-- BACK -->
+                    <div class="face face-back border-cyber-cyan flex flex-col items-center justify-center p-2" onclick="event.stopPropagation(); copyData('kleedhussain@outlook.com', 'email-msg');">
+                        <div class="text-[10px] text-cyber-cyan/70 font-rajdhani tracking-widest mb-1">DECRYPTED DATA</div>
+                        <div class="text-white font-rajdhani font-bold text-lg md:text-xl single-line-clamp tracking-tight px-2 bg-cyber-cyan/10 rounded py-1 border border-cyber-cyan/20 w-[90%] text-center overflow-hidden">
+                            kleedhussain@outlook.com
+                        </div>
+                        <div id="email-msg" class="mt-2 flex items-center gap-2 text-[10px] text-green-400 font-bold opacity-0 transition-opacity">
+                            <i class="fas fa-check"></i> COPIED
+                        </div>
+                        <div class="absolute bottom-6 text-[9px] text-cyber-cyan/40 animate-pulse">TAP TO COPY</div>
+                        <div class="absolute top-4 right-10 w-6 h-6 rounded-full bg-cyber-cyan/20 text-cyber-cyan flex items-center justify-center text-xs hover:bg-cyber-cyan hover:text-black transition-colors" onclick="event.stopPropagation(); closePort('email-port')">
+                            <i class="fas fa-times"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- LINKEDIN GYRO-PORT (Direct) -->
-        <a href="https://www.linkedin.com/in/khaledova/" target="_blank" rel="noopener noreferrer" class="gyro-port group relative w-64 h-64 cursor-pointer transition-all duration-500">
-            <div class="rings-container absolute inset-0 pointer-events-none transition-all duration-700 group-hover:scale-110" style="transform-style: preserve-3d;">
-                <div class="absolute inset-0 rounded-full border border-blue-500/30 animate-[spinY_4s_linear_infinite]"></div>
-                <div class="absolute inset-2 rounded-full border border-blue-400/20 animate-[spinZ_5s_linear_infinite]"></div>
-                <div class="absolute inset-4 rounded-full border border-blue-300/10 animate-[spinX_6s_linear_infinite]"></div>
-            </div>
-            
-            <div class="absolute inset-0 flex items-center justify-center z-10">
-                <div class="bg-[#050508] w-32 h-32 rounded-full border-2 border-blue-500/50 shadow-[0_0_40px_rgba(59,130,246,0.2)] flex flex-col items-center justify-center transition-all duration-500 group-hover:shadow-[0_0_60px_rgba(59,130,246,0.5)] group-hover:border-blue-400 relative overflow-hidden">
-                    <span class="text-3xl mb-1 text-blue-100 group-hover:scale-110 transition-transform">🔗</span>
-                    <span class="font-orbitron font-bold text-[10px] text-blue-500 tracking-widest">LINKEDIN</span>
+            <!-- === 02: LINKEDIN GYRO-PORT === -->
+            <a href="https://www.linkedin.com/in/khaledova/" target="_blank" class="gyro-port relative w-64 h-64 cursor-pointer group transform hover:scale-110 transition-transform duration-500">
+                <div class="rings-container absolute inset-[-20%] pointer-events-none">
+                    <div class="ring-decor absolute inset-0 border-t-2 border-b-2 border-cyber-blue/30 rounded-full animate-[spin_7s_linear_infinite]"></div>
+                    <div class="ring-decor absolute inset-4 border-l-2 border-r-2 border-cyber-blue/20 rounded-full animate-[spin_9s_linear_infinite_reverse]"></div>
                 </div>
-            </div>
-        </a>
+                <div class="absolute inset-0 rounded-full shadow-[0_0_30px_rgba(59,130,246,0.15)] group-hover:shadow-[0_0_60px_rgba(59,130,246,0.4)] border-2 border-cyber-blue/50 bg-[#050508] flex flex-col items-center justify-center transition-all duration-300">
+                    <i class="fab fa-linkedin-in text-5xl text-white mb-3 drop-shadow-[0_0_10px_#3b82f6] group-hover:scale-110 transition-transform"></i>
+                    <div class="font-orbitron font-bold text-cyber-blue tracking-[0.2em] text-sm">LINKEDIN</div>
+                    <div class="text-[10px] bg-cyber-blue/10 px-3 py-1 rounded mt-2 text-cyber-blue border border-cyber-blue/30 group-hover:bg-cyber-blue group-hover:text-white transition-colors">
+                        ESTABLISH LINK <i class="fas fa-external-link-alt ml-1"></i>
+                    </div>
+                </div>
+            </a>
 
-        <!-- PHONE GYRO-PORT -->
-        <div class="gyro-port group relative w-64 h-64 cursor-pointer transition-all duration-500">
-             <div class="rings-container absolute inset-0 pointer-events-none transition-all duration-700 group-hover:scale-110" style="transform-style: preserve-3d;">
-                <div class="absolute inset-0 rounded-full border border-purple-500/30 animate-[spinZ_4s_linear_infinite]"></div>
-                <div class="absolute inset-2 rounded-full border border-purple-400/20 animate-[spinX_5s_linear_infinite]"></div>
-                <div class="absolute inset-4 rounded-full border border-purple-300/10 animate-[spinY_6s_linear_infinite]"></div>
-            </div>
-            
-            <div class="absolute inset-0 flex items-center justify-center z-10">
-                <div class="core-node bg-[#050508] w-32 h-32 rounded-full border-2 border-purple-500/50 shadow-[0_0_40px_rgba(168,85,247,0.2)] flex flex-col items-center justify-center transition-all duration-500 group-hover:shadow-[0_0_60px_rgba(168,85,247,0.5)] group-hover:border-purple-400 relative overflow-hidden">
-                    <div class="flex flex-col items-center justify-center">
-                        <span class="text-2xl mb-1 text-purple-100">📞</span>
-                        <span class="font-orbitron font-bold text-[10px] text-purple-500 tracking-widest mb-1">PHONE</span>
-                        <span class="font-bold text-white text-sm select-all" style="text-shadow: none;">513-405-5156</span>
+            <!-- === 03: PHONE GYRO-PORT === -->
+            <div id="phone-port" class="gyro-port gyro-container relative w-64 h-64 cursor-pointer group" onclick="togglePort('phone-port')">
+                <div class="rings-container absolute inset-[-20%] pointer-events-none">
+                    <div class="ring-decor ring-1 absolute inset-0 border-t-2 border-b-2 border-cyber-purple/30 rounded-full animate-spin-slow"></div>
+                    <div class="ring-decor ring-2 absolute inset-4 border-l-2 border-r-2 border-cyber-purple/20 rounded-full animate-spin-reverse"></div>
+                    <div class="ring-decor absolute inset-8 border border-dashed border-cyber-purple/10 rounded-full animate-[spin_12s_linear_infinite]"></div>
+                </div>
+
+                <div class="core-node relative w-full h-full rounded-full shadow-[0_0_30px_rgba(189,0,255,0.15)] group-hover:shadow-[0_0_50px_rgba(189,0,255,0.3)] transition-shadow duration-500">
+                    <!-- FRONT -->
+                    <div class="face face-front border-2 border-cyber-purple/50 bg-[#050508]">
+                        <i class="fas fa-phone text-4xl text-white mb-3 drop-shadow-[0_0_10px_#bd00ff]"></i>
+                        <div class="font-orbitron font-bold text-cyber-purple tracking-[0.2em] text-sm">SECURE_LINE</div>
+                        <div class="text-[9px] text-cyber-purple/50 mt-2 font-rajdhani">TAP TO REVEAL</div>
+                    </div>
+                    <!-- BACK -->
+                    <div class="face face-back border-cyber-purple flex flex-col items-center justify-center p-2" onclick="event.stopPropagation(); copyData('513-405-5156', 'phone-msg');">
+                        <div class="text-[10px] text-cyber-purple/70 font-rajdhani tracking-widest mb-1">VOICE CHANNEL</div>
+                        <div class="text-white font-rajdhani font-bold text-2xl md:text-3xl single-line-clamp tracking-widest px-4 bg-cyber-purple/10 rounded py-2 border border-cyber-purple/20">
+                            513-405-5156
+                        </div>
+                        <div id="phone-msg" class="mt-2 flex items-center gap-2 text-[10px] text-green-400 font-bold opacity-0 transition-opacity">
+                            <i class="fas fa-check"></i> COPIED
+                        </div>
+                        <div class="absolute bottom-6 text-[9px] text-cyber-purple/40 animate-pulse">TAP TO COPY</div>
+                        <div class="absolute top-4 right-10 w-6 h-6 rounded-full bg-cyber-purple/20 text-cyber-purple flex items-center justify-center text-xs hover:bg-cyber-purple hover:text-black transition-colors" onclick="event.stopPropagation(); closePort('phone-port')">
+                            <i class="fas fa-times"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </section>
 
     <!-- === REDESIGNED: DATA SHARD DOSSIERS (REFERENCES) === -->
@@ -2104,8 +2141,55 @@
 
     animate();
 </script>
+
+
+   <!-- 4. JAVASCRIPT LOGIC -->
+    <script>
+        function togglePort(id) {
+            const el = document.getElementById(id);
+            document.querySelectorAll('.gyro-port').forEach(port => {
+                if(port.id !== id) port.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
+        function closePort(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function copyData(text, msgId) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if(successful) {
+                    const msgEl = document.getElementById(msgId);
+                    msgEl.style.opacity = '1';
+                    setTimeout(() => { msgEl.style.opacity = '0'; }, 2000);
+                }
+            } catch (err) {
+                console.error('Unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.gyro-port')) {
+                document.querySelectorAll('.gyro-port').forEach(port => {
+                    port.classList.remove('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
 
 
 
