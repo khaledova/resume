@@ -1812,7 +1812,11 @@
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x030305, 0.045);
 
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const camunction updateCameraPosition() {
+    const isMobile = window.innerWidth < 768;
+    // Pull the camera further back so the whole globe fits
+    camera.position.z = isMobile ? 34 : 24;
+}era = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
     
     // --- RESPONSIVE CAMERA LOGIC ---
     function updateCameraPosition() {
@@ -2031,8 +2035,9 @@
         overlay.style.pointerEvents = 'none';
         document.getElementById('hud-header').style.opacity = 1;
 
-        const targetZ = window.innerWidth < 768 ? 24 : 16;
-        const finalZ = window.innerWidth < 768 ? 28 : 17;
+        const isMobile = window.innerWidth < 768;
+const targetZ = isMobile ? 30 : 22;
+const finalZ  = isMobile ? 34 : 24;
 
         gsap.to(camera.position, { z: targetZ, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut", onComplete: () => {
             gsap.to(camera.position, { z: finalZ, duration: 1.5, ease: "elastic.out(1, 0.5)" });
@@ -2076,8 +2081,8 @@
         document.querySelectorAll('.node-label').forEach(l => l.classList.remove('active'));
         connectorPath.setAttribute('d', ''); 
         
-        const finalZ = window.innerWidth < 768 ? 28 : 17;
-        gsap.to(camera.position, { x: 0, y: 0, z: finalZ, duration: 1.0, ease: "power3.inOut", onUpdate: () => camera.lookAt(0,0,0) });
+        const finalZ = window.innerWidth < 768 ? 34 : 24;
+gsap.to(camera.position, { x: 0, y: 0, z: finalZ, ... });
     }
 
     function activateNode(mesh) {
@@ -2319,6 +2324,7 @@
     </script>
 </body>
 </html>
+
 
 
 
