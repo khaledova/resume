@@ -1972,7 +1972,7 @@
         trafficSprites.push(sprite);
     }
 
-    coreGroup.scale.set(1.4, 1.4, 1.4);
+    coreGroup.scale.set(1.7, 1.7, 1.7);
 
 
     // --- PART 2: THE NODES ---
@@ -2054,7 +2054,7 @@
         document.getElementById('start-overlay').style.pointerEvents = 'auto';
         document.getElementById('hud-header').style.opacity = 0;
         
-        gsap.to(coreGroup.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 1.5, ease: "power2.inOut" });
+        gsap.to(coreGroup.scale, { x: 1.7, y: 1.7, z: 1.7, duration: 1.5, ease: "power2.inOut" });
         nodeMeshes.forEach((mesh) => {
             gsap.to(mesh.position, { x: 0, y: 0, z: 0, duration: 1.2, ease: "power2.inOut" });
             gsap.to(mesh.scale, { x: 0, y: 0, z: 0, duration: 1.0, ease: "power2.in" });
@@ -2319,6 +2319,7 @@
     </script>
 </body>
 </html>
+
 
 
 
