@@ -2037,7 +2037,7 @@
         gsap.to(camera.position, { z: targetZ, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut", onComplete: () => {
             gsap.to(camera.position, { z: finalZ, duration: 1.5, ease: "elastic.out(1, 0.5)" });
         }});
-        gsap.to(coreGroup.scale, { x: 1.5, y: 1.5, z: 1.5, duration: 1.5, ease: "expo.out" });
+        gsap.to(coreGroup.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 1.5, ease: "expo.out" });
 
         nodeMeshes.forEach((mesh, i) => {
             gsap.to(mesh.position, { x: mesh.userData.targetPos.x, y: mesh.userData.targetPos.y, z: 0, duration: 1.5, delay: i*0.1, ease: "expo.out" });
@@ -2319,6 +2319,7 @@
     </script>
 </body>
 </html>
+
 
 
 
