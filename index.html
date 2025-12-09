@@ -1812,10 +1812,9 @@
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x030305, 0.045);
 
-function updateCameraPosition() {
-    const isMobile = window.innerWidth < 768;
-    // Pull the camera further back so the whole globe fits
-    camera.position.z = isMobile ? 34 : 24;
+function updateCameraPoconst camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+sition() {
+
      
 }era = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
     
@@ -2324,6 +2323,7 @@ gsap.to(camera.position, { x: 0, y: 0, z: finalZ, ... });
     </script>
 </body>
 </html>
+
 
 
 
