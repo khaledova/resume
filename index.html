@@ -1266,6 +1266,36 @@
   }
 </style>
 
+<!-- NEURAL CONTACT SECTION -->
+<style>
+  /* Keep gyro ports fixed in place when opened (no zooming / flying out) */
+  .gyro-port.open {
+    position: relative !important;
+    inset: 0 !important;
+    width: 14rem !important;   /* matches w-56 */
+    height: 14rem !important;
+    transform: none !important;
+  }
+
+  /* Kill any extra scaling on open or click */
+  .gyro-port,
+  .gyro-port .core-node,
+  .gyro-port .rings-container,
+  .gyro-port .ring-decor {
+    transform-origin: center center !important;
+  }
+
+  .gyro-port.open .core-node,
+  .gyro-port.open .rings-container,
+  .gyro-port.open .ring-decor {
+    transform: none !important;
+  }
+
+  .gyro-port:active {
+    transform: none !important;
+  }
+</style>
+
 <section id="neural-contact-section" class="relative w-full py-24 flex flex-col items-center justify-center">
 
     <!-- HEADER -->
@@ -1344,7 +1374,7 @@
                 <div class="face face-back border-cyber-purple flex flex-col items-center justify-center p-2"
                      onclick="event.stopPropagation(); copyData('(513) 405-5156', 'phone-msg');">
                     <div class="text-[10px] text-cyber-purple/70 font-rajdhani tracking-widest mb-1">REACH ME AT</div>
-                    <div class="text-white font-rajdhani font-bold text-2xl md:text-3xl single-line-clamp tracking-widest px-4 bg-cyber-purple/10 rounded py-2 border border-cyber-purple/20">
+                    <div class="text-white font-rajdhani font-bold text-xl md:text-2xl single-line-clamp tracking-widest px-4 bg-cyber-purple/10 rounded py-2 border border-cyber-purple/20">
                         (513) 405-5156
                     </div>
                     <div id="phone-msg" class="mt-2 flex items-center gap-2 text-[10px] text-green-400 font-bold opacity-0 transition-opacity">
@@ -1357,6 +1387,7 @@
 
     </div>
 </section>
+
 
 
     <!-- === REDESIGNED: DATA SHARD DOSSIERS (REFERENCES) === -->
@@ -2356,6 +2387,7 @@
     </script>
 </body>
 </html>
+
 
 
 
